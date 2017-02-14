@@ -20,7 +20,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -42,7 +41,6 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
     // Fixed properties
     private View mView;
     private OnDismissListener mOnDismissListener;
-    private CanDismissCallback mCanDismissCallback;
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
 
     // Transient properties
@@ -50,7 +48,6 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
     private float mDownY;
     private boolean mSwiping;
     private int mSwipingSlop;
-    private Object mToken;
     private VelocityTracker mVelocityTracker;
     private float mTranslationX;
 
@@ -83,14 +80,8 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
                 // TODO: ensure this is a finger, and set a flag
                 mDownX = motionEvent.getRawX();
                 mDownY = motionEvent.getRawY();
-                boolean canDismiss = true;
-                if (mCanDismissCallback != null) {
-                    canDismiss = mCanDismissCallback.canDismiss(mToken);
-                }
-                if (canDismiss) {
-                    mVelocityTracker = VelocityTracker.obtain();
-                    mVelocityTracker.addMovement(motionEvent);
-                }
+                mVelocityTracker = VelocityTracker.obtain();
+                mVelocityTracker.addMovement(motionEvent);
                 return true;
             }
 
@@ -201,16 +192,8 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
         return false;
     }
 
-    public void setToken(Object token) {
-        mToken = token;
-    }
-
     public void setOnDismissListener(OnDismissListener onDismissListener) {
         this.mOnDismissListener = onDismissListener;
-    }
-
-    public void setCanDismissCallback(CanDismissCallback callback) {
-        this.mCanDismissCallback = callback;
     }
 
     private void performDismiss() {
@@ -227,7 +210,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (mOnDismissListener != null) {
-                    mOnDismissListener.onDismiss(mView, mToken);
+                    mOnDismissListener.onDismiss(mView);
                 }
                 // Reset view presentation
                 mView.setAlpha(1f);
@@ -254,16 +237,7 @@ public class SwipeDismissTouchListener implements View.OnTouchListener {
          * Called when the user has indicated they she would like to dismiss the view.
          *
          * @param view  The originating {@link View} to be dismissed.
-         * @param token The optional token passed to this object's constructor.
          */
-        void onDismiss(@NonNull View view, @Nullable Object token);
-    }
-
-    public interface CanDismissCallback {
-
-        /**
-         * Called to determine whether the view can be dismissed.
-         */
-        boolean canDismiss(@Nullable Object token);
+        void onDismiss(@NonNull View view);
     }
 }

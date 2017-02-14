@@ -2,7 +2,6 @@ package com.commit451.swipedismisstouchlistener.sample;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         SwipeDismissTouchListener swipeDismissTouchListener = new SwipeDismissTouchListener(view);
         swipeDismissTouchListener.setOnDismissListener(new SwipeDismissTouchListener.OnDismissListener() {
             @Override
-            public void onDismiss(@NonNull View view, @Nullable Object token) {
+            public void onDismiss(@NonNull View view) {
                 root.removeView(view);
             }
         });
