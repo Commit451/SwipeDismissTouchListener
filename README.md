@@ -3,6 +3,18 @@ Swipe dismiss on any ViewGroup
 
 [![Build Status](https://travis-ci.org/Commit451/SwipeDismissTouchListener.svg?branch=master)](https://travis-ci.org/Commit451/SwipeDismissTouchListener) [![](https://jitpack.io/v/Commit451/SwipeDismissTouchListener.svg)](https://jitpack.io/#Commit451/SwipeDismissTouchListener)
 
+# Usage
+```java
+View view = findViewById(R.id.card1);
+SwipeDismissTouchListener swipeDismissTouchListener = new SwipeDismissTouchListener(view);
+swipeDismissTouchListener.setOnDismissListener(new SwipeDismissTouchListener.OnDismissListener() {
+    @Override
+    public void onDismiss(@NonNull View view) {
+        root.removeView(view);
+    }
+});
+view.setOnTouchListener(swipeDismissTouchListener);
+```
 # Acknowledgements
 Derived from the [sample](https://github.com/romannurik/Android-SwipeToDismiss) provided by Roman Nurik
 
